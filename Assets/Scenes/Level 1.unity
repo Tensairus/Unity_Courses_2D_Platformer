@@ -12101,17 +12101,6 @@ Transform:
   - {fileID: 1008315823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &727423059 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7076282040280554338, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-  m_PrefabInstance: {fileID: 4588692907238026505}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb6a50ce633b2f64c90623c1c5e02c4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
 --- !u!114 &938042342 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 132860261684335179, guid: 61623aff5e33a44418d5bad18367c081, type: 3}
@@ -13086,7 +13075,7 @@ MonoBehaviour:
   _spawnBoundaryYMax: 10
   _spawnPositionOffsetY: 0.5
   _coinsSpawnCount: 5
-  _coinsOverlapRadius: 0.7
+  _coinsMinDistanceAcceptable: 0
 --- !u!4 &2018325303
 Transform:
   m_ObjectHideFlags: 0
@@ -13210,34 +13199,6 @@ PrefabInstance:
     - target: {fileID: 4174208199415952153, guid: 53977b4f001d6504992678021d8228a2, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 727423059}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: TurnAround
-      objectReference: {fileID: 0}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Player, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 5468772658205955947, guid: 53977b4f001d6504992678021d8228a2, type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
