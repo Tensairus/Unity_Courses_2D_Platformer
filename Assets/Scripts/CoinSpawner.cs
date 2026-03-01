@@ -13,7 +13,7 @@ public class CoinSpawner : MonoBehaviour
     [SerializeField] private float _spawnBoundaryYMax;
     [SerializeField] private float _spawnPositionOffsetY;
     [SerializeField] private int _coinsSpawnCount;
-    [SerializeField] private float _coinsOverlapRadius;
+    [SerializeField] private float _coinsMinDistanceAcceptable;
 
     private ObjectPool<Coin> _coinsPool;
     private int _poolDefaultCapacity = 10;
@@ -23,13 +23,13 @@ public class CoinSpawner : MonoBehaviour
     private List<Coin> _activeCoins;
 
     private float _maxRayLength;
-    private float _sqrCoinsOverlapRadius;
+    private float _sqrCoinsMinDistanceAcceptable;
 
     private void Awake()
     {
         _activeCoins = new List<Coin>();
         _maxRayLength = _spawnBoundaryYMax - _spawnBoundaryYMin;
-        _sqrCoinsOverlapRadius = _coinsOverlapRadius * _coinsOverlapRadius;
+        _sqrCoinsMinDistanceAcceptable = _coinsMinDistanceAcceptable * _coinsMinDistanceAcceptable;
 
         _coinsPool = new ObjectPool<Coin>
             (
@@ -52,39 +52,36 @@ public class CoinSpawner : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             Coin newCoin = _coinsPool.Get();
-            newCoin.transform.position = PickRandomUnoccupiedPosition(newCoin);
+            newCoin.transform.position = GetRandomUnoccupiedPosition(newCoin);
         }
     }
 
-    private Vector2 PickRandomUnoccupiedPosition(Coin coin)
+    private Vector2 GetRandomUnoccupiedPosition(Coin coin)
     {
         int tryCounter = 1;
-        int tryCounterLimit = 1000;
-        bool isPicking = true;
+        int tryCounterLimit = 100;
+        bool isSearching = true;
 
         Vector2 newPosition = new Vector2();
 
-        while (isPicking == true && tryCounter <= tryCounterLimit)
+        while (isSearching == true && tryCounter <= tryCounterLimit)
         {
             tryCounter++;
 
             newPosition = new Vector2(Random.Range(_spawnBoundaryXMin, _spawnBoundaryXMax), Random.Range(_spawnBoundaryYMin, _spawnBoundaryYMax));
 
-            if (CheckOverlapCircle(coin.Collider, newPosition) == false)
+            if (CheckObjectsOverlap(coin.Collider, newPosition) == false)
             {
-                RaycastHit2D hit = Physics2D.Raycast(newPosition, Vector2.down, _maxRayLength);                
+                RaycastHit2D hit = Physics2D.Raycast(newPosition, Vector2.down, _maxRayLength);
 
-                if (hit.collider != null)
+                if (hit.collider != null && hit.collider.TryGetComponent<Platform>(out _))
                 {
-                    if (hit.collider.TryGetComponent<Platform>(out _))
-                    {
-                        newPosition = hit.point;
-                        newPosition.y += _spawnPositionOffsetY;
+                    newPosition = hit.point;
+                    newPosition.y += _spawnPositionOffsetY;
 
-                        if (CheckCoinsOverlap(newPosition) == false)
-                        {
-                            isPicking = false;
-                        }
+                    if (!CheckCoinsOverlap(newPosition))
+                    {
+                        isSearching = false;
                     }
                 }
             }
@@ -93,17 +90,25 @@ public class CoinSpawner : MonoBehaviour
         return newPosition;
     }
 
+    private bool CheckObjectsOverlap(CircleCollider2D collider, Vector2 position)
+    {
+        Collider2D hit = Physics2D.OverlapCircle(position, collider.radius, _spawnForbiddenCollisionLayers);
+
+        return hit != null;
+    }
+
     private bool CheckCoinsOverlap(Vector3 position)
     {
-        foreach(Coin coin in _activeCoins)
+        foreach (Coin coin in _activeCoins)
         {
-            if ((coin.transform.position - position).sqrMagnitude <= _sqrCoinsOverlapRadius)
+            if ((coin.transform.position - position).sqrMagnitude <= _sqrCoinsMinDistanceAcceptable)
             {
                 return true;
             }
         }
 
         return false;
+    
     }
 
     private Coin OnCreateNewPoolableObject()
@@ -136,12 +141,5 @@ public class CoinSpawner : MonoBehaviour
     {
         _coinsPool.Release(coin);
         SpawnCoin(_coinsSpawnOnPickUpAmount);
-    }
-
-    private bool CheckOverlapCircle(CircleCollider2D collider, Vector2 position)
-    {
-        Collider2D hit = Physics2D.OverlapCircle(position, collider.radius, _spawnForbiddenCollisionLayers);
-
-        return hit != null;
     }
 }

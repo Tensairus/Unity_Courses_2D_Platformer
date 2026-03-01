@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class GroundChecker : MonoBehaviour
 {
-    // Возможно, стоит вынести переменную _isGrounded в этот класс, как публичный параметр
     [SerializeField] private Collider2D _collider;
 
     public event Action<bool> GroundedStateChanged;

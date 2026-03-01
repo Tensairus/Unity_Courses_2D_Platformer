@@ -53,16 +53,16 @@ public class Player : Character
 
     public void TurnAround()
     {
-        float faceRightRotationValue = 0f;
-        float faceLeftRotationValue = 180f;
+        float faceRightRotationValueY = 0f;
+        float faceLeftRotationValueY = 180f;
 
-        if (_moveDirectionHorizontal == Vector2.right.x && _currentRotationY != faceRightRotationValue)
+        if (_moveDirectionHorizontal == Vector2.right.x && _currentRotationY != faceRightRotationValueY)
         {
-            _currentRotationY = faceRightRotationValue;
+            _currentRotationY = faceRightRotationValueY;
         }
-        else if (_moveDirectionHorizontal == Vector2.left.x && _currentRotationY != faceLeftRotationValue)
+        else if (_moveDirectionHorizontal == Vector2.left.x && _currentRotationY != faceLeftRotationValueY)
         {
-            _currentRotationY = faceLeftRotationValue;
+            _currentRotationY = faceLeftRotationValueY;
         }
 
         transform.rotation = Quaternion.Euler(0, _currentRotationY, 0);
@@ -118,9 +118,13 @@ public class Player : Character
         else
         {
             if (_currentHorizontalSpeed != 0)
+            {
                 PlayAnimation("Run");
+            }
             else
+            {
                 PlayAnimation("Idle");
+            }
         }
     }
 }
