@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class WallChecker : MonoBehaviour
 {
-    // Возможно, стоит вынести переменную _hasWallNearby в этот класс, как публичный параметр
     [SerializeField] private Collider2D _collider;
 
     public event Action<bool> WallNearbyStatusChanged;

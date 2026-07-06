@@ -1,11 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(Flipper))]
+[RequireComponent(typeof(Jumper))]
+
 public class Player : Character
 {
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _groundingForce;
-    [SerializeField] private float _currentRotationY;
+    [SerializeField] private Mover _mover;
+    [SerializeField] private Flipper _flipper;
+    [SerializeField] private Jumper _jumper;
 
     private InputSystemActions _playerControls;
 
@@ -18,13 +24,18 @@ public class Player : Character
 
         _playerControls = new InputSystemActions();
 
+        _mover.Initialize(_moveSpeed, _rigidBody);
+
         _groundChecker.GroundedStateChanged += ChangeGroundedState;
         _wallChecker.WallNearbyStatusChanged += ChangeWallFacingState;
     }
 
     private void FixedUpdate()
     {
-        HandleMovement();
+        _currentRotationY = _flipper.HandleFacingDirection(_moveDirectionHorizontal, _currentRotationY, _isDefaultFacingRight);
+
+        _mover.HandleMovement(_moveDirectionHorizontal, _isFacingWall);
+
         HandleAnimation();
     }
 
@@ -35,37 +46,17 @@ public class Player : Character
 
     private void OnDisable()
     {
-        _playerControls.Disable();
+        _playerControls.Disable();        
     }
 
-    public void Move(InputAction.CallbackContext context)
+    public void ProcessMovementInput(InputAction.CallbackContext context)
     {
-        _moveDirectionHorizontal = context.ReadValue<Vector2>().x;
+        _moveDirectionHorizontal = context.ReadValue<Vector2>().x;       
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (_isGrounded == true)
-        {
-            _rigidBody.linearVelocityY = _jumpForce;
-        }
-    }
-
-    public void TurnAround()
-    {
-        float faceRightRotationValueY = 0f;
-        float faceLeftRotationValueY = 180f;
-
-        if (_moveDirectionHorizontal == Vector2.right.x && _currentRotationY != faceRightRotationValueY)
-        {
-            _currentRotationY = faceRightRotationValueY;
-        }
-        else if (_moveDirectionHorizontal == Vector2.left.x && _currentRotationY != faceLeftRotationValueY)
-        {
-            _currentRotationY = faceLeftRotationValueY;
-        }
-
-        transform.rotation = Quaternion.Euler(0, _currentRotationY, 0);
+        _jumper.Jump(_isGrounded, _jumpForce, _rigidBody);
     }
 
     private void ChangeGroundedState(bool newState)
@@ -76,20 +67,6 @@ public class Player : Character
     private void ChangeWallFacingState(bool newState)
     {
         _isFacingWall = newState;
-    }
-
-    private void HandleMovement()
-    {
-        if (_moveDirectionHorizontal != 0 && _isFacingWall == false)
-        {
-            _currentHorizontalSpeed = _moveDirectionHorizontal * _moveSpeed;
-        }
-        else
-        {
-            _currentHorizontalSpeed = 0f;
-        }
-
-        _rigidBody.linearVelocityX = _currentHorizontalSpeed;
     }
 
     private void HandleAnimation()
@@ -117,7 +94,7 @@ public class Player : Character
         }
         else
         {
-            if (_currentHorizontalSpeed != 0)
+            if (_mover.CurrentHorizontalSpeed != 0)
             {
                 PlayAnimation("Run");
             }

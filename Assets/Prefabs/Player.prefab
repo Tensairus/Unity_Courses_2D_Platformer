@@ -124,6 +124,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2101333553134434226}
   - component: {fileID: 7076282040280554338}
+  - component: {fileID: 2690825524198707690}
+  - component: {fileID: 184585943098477524}
+  - component: {fileID: 7779755072389343148}
   - component: {fileID: 5468772658205955947}
   - component: {fileID: 4846465199874684010}
   - component: {fileID: 145373690331279613}
@@ -164,21 +167,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6a50ce633b2f64c90623c1c5e02c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  _name: Player
   _animator: {fileID: 412050580903474384}
   _spriteRenderer: {fileID: 3438027787727107638}
   _rigidBody: {fileID: 145373690331279613}
-  _moveSpeed: 5
-  _currentHorizontalSpeed: 0
-  _currentVerticalSpeed: 0
-  _moveDirectionHorizontal: 0
   _groundChecker: {fileID: 574291289473631609}
   _wallChecker: {fileID: 3276436919577201017}
+  _name: Player
+  _moveSpeed: 5
+  _moveDirectionHorizontal: 0
+  _currentVerticalSpeed: 0
+  _currentRotationY: 0
   _isGrounded: 0
   _isFacingWall: 0
+  _isDefaultFacingRight: 1
   _jumpForce: 11
   _groundingForce: -2
-  _currentRotationY: 0
+  _mover: {fileID: 2690825524198707690}
+  _flipper: {fileID: 184585943098477524}
+  _jumper: {fileID: 7779755072389343148}
+--- !u!114 &2690825524198707690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174208199415952153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a836a9a86256f1a47bedcc2a0e7e72f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Mover
+--- !u!114 &184585943098477524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174208199415952153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e18c6b05bcfd6843b6ec947f711204b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flipper
+--- !u!114 &7779755072389343148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174208199415952153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406e12f3699edae4d9c4f946b0a3164f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Jumper
 --- !u!114 &5468772658205955947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +266,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7076282040280554338}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: Move
+        m_MethodName: ProcessMovementInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

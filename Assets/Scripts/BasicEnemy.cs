@@ -1,30 +1,31 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(Flipper))]
+
 public class BasicEnemy : Character
 {
+    [SerializeField] private Mover _mover;
+    [SerializeField] private Flipper _flipper;
+
     private void Awake()
     {
+        _mover.Initialize(_moveSpeed, _rigidBody);
+
         _groundChecker.GroundedStateChanged += EvadePitFall;
         _wallChecker.WallNearbyStatusChanged += EvadeWall;
     }
 
     private void Update()
     {
-        HandleMovement();
-        HandleAnimation();
-    }
+        _mover.HandleMovement(_moveDirectionHorizontal, _isFacingWall);
 
-    private void HandleMovement()
-    {
-        if (_isGrounded == true && _isFacingWall == false)
-        {
-            _rigidBody.linearVelocityX = _moveDirectionHorizontal * _moveSpeed;
-        }
+        HandleAnimation();
     }
 
     private void HandleAnimation()
     {
-        if (_moveDirectionHorizontal != 0)
+        if (_moveDirectionHorizontal != 0 && _isGrounded == true)
         {
             PlayAnimation("Walk");
         }
@@ -41,7 +42,6 @@ public class BasicEnemy : Character
         if (_isGrounded == false)
         {
             TurnAround();
-            ChangeHorizontalMovementDirection();
         }
     }
 
@@ -52,20 +52,13 @@ public class BasicEnemy : Character
         if (_isFacingWall == true)
         {
             TurnAround();
-            ChangeHorizontalMovementDirection();
         }
     }
 
     private void TurnAround()
     {
-        int rotationValueY = 0;
-
-        if (_moveDirectionHorizontal < 0)
-        {
-            rotationValueY = 180;
-        }
-
-        transform.rotation = Quaternion.Euler(0, rotationValueY, 0);
+        ChangeHorizontalMovementDirection();
+        _currentRotationY = _flipper.HandleFacingDirection(_moveDirectionHorizontal, _currentRotationY, _isDefaultFacingRight);
     }
 
     private void ChangeHorizontalMovementDirection()
