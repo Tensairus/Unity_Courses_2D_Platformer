@@ -11,6 +11,7 @@ public class BasicEnemy : Character
     private void Awake()
     {
         _mover.Initialize(_moveSpeed, _rigidBody);
+        _flipper.Initialize(_moveSpeed, _rigidBody, _isSpriteDefaultFacingRight);
 
         _groundChecker.GroundedStateChanged += EvadePitFall;
         _wallChecker.WallNearbyStatusChanged += EvadeWall;
@@ -27,11 +28,11 @@ public class BasicEnemy : Character
     {
         if (_moveDirectionHorizontal != 0 && _isGrounded == true)
         {
-            PlayAnimation("Walk");
+            PlayAnimation(EnemyAnimationData.BasicEnemy.Animations.WalkHash);
         }
         else
         {
-            PlayAnimation("Idle");
+            PlayAnimation(EnemyAnimationData.BasicEnemy.Animations.IdleHash);
         }
     }
 
@@ -58,7 +59,7 @@ public class BasicEnemy : Character
     private void TurnAround()
     {
         ChangeHorizontalMovementDirection();
-        _currentRotationY = _flipper.HandleFacingDirection(_moveDirectionHorizontal, _currentRotationY, _isDefaultFacingRight);
+        _flipper.HandleFacingDirection(_moveDirectionHorizontal);
     }
 
     private void ChangeHorizontalMovementDirection()

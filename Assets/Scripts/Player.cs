@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(Flipper))]
 [RequireComponent(typeof(Jumper))]
+[RequireComponent(typeof(CoinPicker))]
 
 public class Player : Character
 {
@@ -20,11 +21,10 @@ public class Player : Character
 
     private void Awake()
     {
-        _currentRotationY = transform.rotation.y;
-
         _playerControls = new InputSystemActions();
 
         _mover.Initialize(_moveSpeed, _rigidBody);
+        _flipper.Initialize(_moveSpeed, _rigidBody, _isSpriteDefaultFacingRight);
 
         _groundChecker.GroundedStateChanged += ChangeGroundedState;
         _wallChecker.WallNearbyStatusChanged += ChangeWallFacingState;
@@ -32,9 +32,8 @@ public class Player : Character
 
     private void FixedUpdate()
     {
-        _currentRotationY = _flipper.HandleFacingDirection(_moveDirectionHorizontal, _currentRotationY, _isDefaultFacingRight);
-
         _mover.HandleMovement(_moveDirectionHorizontal, _isFacingWall);
+        _flipper.HandleFacingDirection(_moveDirectionHorizontal);
 
         HandleAnimation();
     }
@@ -46,12 +45,12 @@ public class Player : Character
 
     private void OnDisable()
     {
-        _playerControls.Disable();        
+        _playerControls.Disable();
     }
 
     public void ProcessMovementInput(InputAction.CallbackContext context)
     {
-        _moveDirectionHorizontal = context.ReadValue<Vector2>().x;       
+        _moveDirectionHorizontal = context.ReadValue<Vector2>().x;
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -75,33 +74,28 @@ public class Player : Character
         {
             if (_isFacingWall && _rigidBody.linearVelocityY < 0)
             {
-                PlayAnimation("Wall-Slide");
-                return;
-            }
-
-            if (_rigidBody.linearVelocityY > 0)
-            {
-                PlayAnimation("Jump");
+                PlayAnimation(PlayerAnimatorData.Animations.WallSlideHash);
             }
             else if (_rigidBody.linearVelocityY >= _minJumpToFallVelocityY && _rigidBody.linearVelocityY <= _maxJumpToFallVelocityY)
             {
-                PlayAnimation("JumptoFall");
+                PlayAnimation(PlayerAnimatorData.Animations.JumpToFallHash);
             }
-            else if (_animator.GetCurrentAnimatorStateInfo(0).IsName("JumptoFall") == false)
+            else if (_animator.GetCurrentAnimatorStateInfo(0).shortNameHash != PlayerAnimatorData.Animations.JumpToFallHash && _rigidBody.linearVelocityY < 0)
             {
-                PlayAnimation("Fall");
+                PlayAnimation(PlayerAnimatorData.Animations.FallHash);
             }
+            else if (_rigidBody.linearVelocityY > 0)
+            {
+                PlayAnimation(PlayerAnimatorData.Animations.JumpHash);
+            }
+        }
+        else if (Mathf.Abs(_mover.CurrentHorizontalSpeed) >= 0.001f)
+        {
+            PlayAnimation(PlayerAnimatorData.Animations.RunHash);
         }
         else
         {
-            if (_mover.CurrentHorizontalSpeed != 0)
-            {
-                PlayAnimation("Run");
-            }
-            else
-            {
-                PlayAnimation("Idle");
-            }
+            PlayAnimation(PlayerAnimatorData.Animations.IdleHash);
         }
     }
 }

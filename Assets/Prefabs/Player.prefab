@@ -179,7 +179,8 @@ MonoBehaviour:
   _currentRotationY: 0
   _isGrounded: 0
   _isFacingWall: 0
-  _isDefaultFacingRight: 1
+  _isSpriteDefaultFacingRight: 1
+  _currentAnimation: 0
   _jumpForce: 11
   _groundingForce: -2
   _mover: {fileID: 2690825524198707690}

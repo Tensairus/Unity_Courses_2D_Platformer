@@ -9,11 +9,8 @@ public class Coin : MonoBehaviour
 
     public event Action<Coin> CoinPicked;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnCoinPicked()
     {
-        if (collision.TryGetComponent<Player>(out _))
-        {
-            CoinPicked?.Invoke(this);
-        }
+        CoinPicked?.Invoke(this);
     }
 }

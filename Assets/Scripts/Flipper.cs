@@ -2,35 +2,44 @@ using UnityEngine;
 
 public class Flipper : MonoBehaviour
 {
+    private Rigidbody2D _rigidBody;
+    private float _currentRotationY;
+    private float _faceRightRotationValueY;
+    private float _faceLeftRotationValueY;
 
 
-    public float HandleFacingDirection(float moveDirectionHorizontal, float currentRotationY, bool isDefaultFacingRight)
+    public void HandleFacingDirection(float moveDirectionHorizontal)
     {
-        float faceRightRotationValueY;
-        float faceLeftRotationValueY;
+        if (moveDirectionHorizontal != 0)
+        {
+            if (moveDirectionHorizontal == Vector2.right.x && _currentRotationY != _faceRightRotationValueY)
+            {
+                _currentRotationY = _faceRightRotationValueY;
+            }
+            else if (moveDirectionHorizontal == Vector2.left.x && _currentRotationY != _faceLeftRotationValueY)
+            {
+                _currentRotationY = _faceLeftRotationValueY;
+            }
+
+            transform.rotation = Quaternion.Euler(0, _currentRotationY, 0);
+            _currentRotationY = _rigidBody.transform.rotation.y;
+        }
+    }
+
+    public void Initialize(float moveSpeed, Rigidbody2D rigidBody, bool isDefaultFacingRight)
+    {
+        _rigidBody = rigidBody;
+        _currentRotationY = _rigidBody.transform.rotation.y;
 
         if (isDefaultFacingRight == true)
         {
-            faceRightRotationValueY = 0f;
-            faceLeftRotationValueY = 180f;
+            _faceRightRotationValueY = 0f;
+            _faceLeftRotationValueY = 180f;
         }
         else
         {
-            faceRightRotationValueY = 180f;
-            faceLeftRotationValueY = 0;
+            _faceRightRotationValueY = 180f;
+            _faceLeftRotationValueY = 0;
         }
-
-        if (moveDirectionHorizontal == Vector2.right.x && currentRotationY != faceRightRotationValueY)
-        {
-            currentRotationY = faceRightRotationValueY;
-        }
-        else if (moveDirectionHorizontal == Vector2.left.x && currentRotationY != faceLeftRotationValueY)
-        {
-            currentRotationY = faceLeftRotationValueY;
-        }
-
-        transform.rotation = Quaternion.Euler(0, currentRotationY, 0);
-
-        return currentRotationY;
     }
 }

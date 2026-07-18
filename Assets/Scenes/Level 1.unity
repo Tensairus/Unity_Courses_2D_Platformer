@@ -119,6 +119,23 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &13939701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4174208199415952153, guid: 53977b4f001d6504992678021d8228a2, type: 3}
+  m_PrefabInstance: {fileID: 4588692907238026505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &13939705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13939701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acf5d284a2ceb241badc0887a501902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinPicker
 --- !u!1 &82390718
 GameObject:
   m_ObjectHideFlags: 0
@@ -13203,7 +13220,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4174208199415952153, guid: 53977b4f001d6504992678021d8228a2, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 13939705}
   m_SourcePrefab: {fileID: 100100000, guid: 53977b4f001d6504992678021d8228a2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
